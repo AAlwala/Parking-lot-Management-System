@@ -22,7 +22,7 @@ USE ParkinglotMgmtSystem;
 Create new tables
 */
 /* 1. Users Table - Stores information about registered users (customers and admins).
-Author: Amani Alwala
+
 */
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +36,7 @@ CREATE TABLE users (
 );
 
 /*2. Vehicles Table - Stores vehicle details linked to users.
-Author: Amani Alwala
+
 */
 CREATE TABLE vehicles (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE vehicles (
 );
 
 /*3. Parking Lots Table - Stores details about parking lots.
-Author: Amani Alwala
+
 */
 CREATE TABLE parking_lots (
     lot_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,7 +59,7 @@ CREATE TABLE parking_lots (
 );
 
 /*4. Parking Slots Table - Stores details of each parking slot in a parking lot.
-Author: Arun Anantharam Bagade
+
 */
 CREATE TABLE parking_slots (
     slot_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,7 +71,7 @@ CREATE TABLE parking_slots (
 );
 
 /*5. Parking Sensors Table - Stores IoT sensor details for tracking parking slot status.
-Author: Arun Anantharam Bagade
+
 */
 CREATE TABLE parking_sensors (
     sensor_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -82,7 +82,7 @@ CREATE TABLE parking_sensors (
 );
 
 /*6. Bookings Table - Stores parking reservations made by users.
-Author: Arun Anantharam Bagade
+
 */
 CREATE TABLE bookings (
     booking_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -98,7 +98,7 @@ CREATE TABLE bookings (
 );
 
 /*7. Payments Table - Stores payment transactions.
-Author: Shivangi Jaiswal
+
 */
 CREATE TABLE payments (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -110,7 +110,7 @@ CREATE TABLE payments (
     FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) ON DELETE CASCADE
 );
 /*8. Access Control Table - Stores details of access authentication (RFID or QR-based).
-Author: Shivangi Jaiswal
+
 */
 CREATE TABLE access_control (
     access_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -124,7 +124,7 @@ CREATE TABLE access_control (
 );
 
 /*9. Logs Table - Tracks all entry/exit activity in parking lots.
-Author: Shivangi Jaiswal
+
 */
 CREATE TABLE logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -137,7 +137,7 @@ CREATE TABLE logs (
 );
 
 /*10. Violations Table - Stores unauthorized parking attempts.
-Author: Yidi Li
+
 */
 CREATE TABLE violations (
     violation_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -149,7 +149,7 @@ CREATE TABLE violations (
     FOREIGN KEY (lot_id) REFERENCES parking_lots(lot_id) ON DELETE CASCADE
 );
 /*11. Staff Table - Stores details of parking lot staff and administrators.
-Author: Yidi Li
+
 */
 CREATE TABLE staff (
     staff_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -163,7 +163,7 @@ CREATE TABLE staff (
 );
 
 /*12. Subscription Plans Table (Lookup Table)- Stores predefined parking subscription plans.
-Author: Yidi Li
+
 */
 CREATE TABLE subscription_plans (
     plan_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -173,7 +173,7 @@ CREATE TABLE subscription_plans (
 );
 
 /*13. User Subscriptions Table (Intersection Table) - Tracks which users are subscribed to a plan.
-Author: Parthan Patel
+
 */
 CREATE TABLE user_subscriptions (
     subscription_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -187,7 +187,7 @@ CREATE TABLE user_subscriptions (
 );
 
 /*14. Discounts Table - Stores promotional discount codes.
-Author: Parthan Patel
+
 */
 CREATE TABLE discounts (
     discount_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -197,7 +197,7 @@ CREATE TABLE discounts (
 );
 
 /*15. Booking_Discounts Table (Intersection Table) - Applies discount codes to bookings.
-Author: Parthan Patel
+
 */
 CREATE TABLE booking_discounts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -253,7 +253,6 @@ Complex Queries
 /*
 Query 1
 /*Peak entry time by hour per lot 
-Author: Amani Alwala
 */
  
 SELECT 
@@ -277,7 +276,6 @@ ORDER BY pl.lot_id, entry_count DESC;
 /*
 Query 2
 Description: Displays all active bookings along with the user’s name and vehicle details.
-Author: Amani Alwala
 */
  
 SELECT b.booking_id, u.first_name, u.last_name, v.license_plate, b.start_time, b.end_time
@@ -289,7 +287,6 @@ WHERE b.status = 'active';
 /*
 Query 3
 Description: Finds vehicles with recorded parking violations.
-Author: Arun Anantharam Bagade
 */
  
 SELECT v.vehicle_id, 
@@ -303,7 +300,6 @@ HAVING violation_count > 0;
 /*
 Query 4
 /* Query analyzes sensor behavior over the past week 
-Author: Arun Anantharam Bagade
 */
 SELECT 
     ps.sensor_id,
@@ -324,7 +320,6 @@ ORDER BY ps.last_updated ASC;
 /*
 Query 5
 Description: Lists users who currently have active subscriptions along with their plan details.
-Author: Shivangi Jaiswal
 */
  
 SELECT u.user_id, u.first_name, u.last_name, sp.plan_name, us.start_date, us.end_date
@@ -337,7 +332,6 @@ WHERE us.status = 'active';
 /*
 Query 6
 Description: Identifies the most frequently parked vehicle type for each parking lot.
-Author: Shivangi Jaiswal
 */
  
 SELECT pl.lot_id, pl.lot_name, v.vehicle_type, COUNT(*) AS vehicle_count
@@ -351,7 +345,6 @@ ORDER BY vehicle_count DESC;
 /*
 Query 7
 Description: Lists customers who have not made any booking in the last three months.
-Author: Yidi Li
 */
  
 SELECT u.user_id, u.first_name, u.last_name
@@ -364,7 +357,6 @@ WHERE u.user_type = 'customer' AND b.booking_id IS NULL;
 /*
 Query 8
 Description: Top most booked parking lots in the current year 
-Author: Yidi Li
 */
  
 SELECT  
@@ -382,7 +374,6 @@ LIMIT 5;
 /*
 Query 9
 Description: Calculates the average time vehicles remain parked in each parking lot.
-Author: Parthan Patel
 */
  
 SELECT pl.lot_id, pl.lot_name, AVG(TIMESTAMPDIFF(MINUTE, l.entry_time, l.exit_time)) AS avg_parking_duration
@@ -394,7 +385,6 @@ GROUP BY pl.lot_id, pl.lot_name;
 /*
 Query 10
 Description: Shows all discounts applied to completed bookings along with the payment amount.
-Author: Parthan Patel
 */
  
 SELECT b.booking_id, d.code, d.discount_percentage, p.amount
@@ -402,7 +392,7 @@ FROM booking_discounts bd
 JOIN bookings b ON bd.booking_id = b.booking_id
 JOIN discounts d ON bd.discount_id = d.discount_id
 JOIN payments p ON b.booking_id = p.booking_id
-WHERE b.status = 'active' AND p.payment_status = 'completed';
+WHERE b.status = 'completed' AND p.payment_status = 'completed';
 
 -- ----------------------------------------------------------------------------------
 -- Stored Procedures 
@@ -411,7 +401,6 @@ WHERE b.status = 'active' AND p.payment_status = 'completed';
 DELIMITER //
 -- 1. ReportMonthlyRevenue
 -- Iterates over each lot with a cursor, aggregates revenue, and returns a result set.
--- Author: Amani Alwala
 CREATE PROCEDURE ReportMonthlyRevenue(
     IN p_year  INT,
     IN p_month INT
@@ -461,7 +450,7 @@ END;
 
 -- 2. AllocateNearestAvailableSlot
 -- Finds the closest available slot in a lot and creates a booking.
--- Author: Arun Anantharam Bagade
+
 CREATE PROCEDURE AllocateNearestAvailableSlot(
     IN  p_vehicle_id   INT,
     IN  p_lot_id       INT,
@@ -480,7 +469,7 @@ BEGIN
     INTO v_slot_id
     FROM parking_slots
     WHERE lot_id = p_lot_id
-      AND is_available = 0
+      AND is_available = TRUE
       AND IsSlotAvailable(slot_id, p_start_time, p_end_time) = TRUE
     ORDER BY CAST(slot_number AS UNSIGNED) ASC
     LIMIT 1
@@ -508,7 +497,7 @@ END;
 
 -- 3. CleanupStaleBookings
 -- Expires pending bookings older than 1 hour and logs a 'no_booking' violation for each.
--- Author: Shivangi Jaiswal
+
 CREATE PROCEDURE CleanupStaleBookings()
 BEGIN
   DECLARE done        BOOLEAN DEFAULT FALSE;
@@ -544,7 +533,7 @@ END;
 
 -- 4. UpgradeUserSubscription
 -- Auto‑upgrades a heavy‑use customer to the next plan tier, extending their end_date.
--- Author: Parthan Patel
+
 DELIMITER //
 /* calling UpgradeUserSubscription */
  
@@ -624,7 +613,6 @@ END
 
 -- 5. AuditSensorAnomalies
 -- Scans sensors and flags any 'vacant' sensor that still has an active booking.
--- Author: Yidi Li
 
 DELIMITER //
 CREATE PROCEDURE AuditSensorAnomalies()
@@ -673,7 +661,6 @@ DELIMITER ;
 
 -- 1. GetOccupancyRate
 -- Calculates occupancy rate (%) for a lot on a given date.
--- Author: Arun Anantharam Bagade
 
 DELIMITER //
 CREATE FUNCTION GetOccupancyRate(
@@ -704,7 +691,7 @@ DELIMITER ;
 
 -- 2. GetBookingDuration
 -- Returns the duration in hours (decimal) for a booking.
--- Author: Amani Alwala
+
 
 DELIMITER //
 CREATE FUNCTION GetBookingDuration(p_booking_id INT)
@@ -728,7 +715,7 @@ DELIMITER ;
 
 -- 3. IsSlotAvailable
 -- Checks for any overlapping booking on a slot.
--- Author: Shivangi Jaiswal
+
 
 DELIMITER //
 CREATE FUNCTION IsSlotAvailable(
@@ -756,7 +743,7 @@ DELIMITER ;
 
 -- 4. CalculateUserMonthlyExpenditure
 -- Sums completed payments for a user in a given month.
--- Author: Parthan Patel
+
 
 DELIMITER //
 CREATE FUNCTION CalculateUserMonthlyExpenditure(
@@ -786,7 +773,6 @@ DELIMITER ;
 
 -- 5. GetPeakBookingStartHour
 -- Returns the hour (0–23) when most bookings start in a lot.
--- Author: Yidi Li
 
 DELIMITER //
 CREATE FUNCTION GetPeakBookingStartHour(p_lot_id INT)
@@ -812,7 +798,7 @@ DELIMITER ;
 -- ----------------------------------------------------------------------------------
 -- ---------------------------Triggers--------------------
 -- 1. After a booking is created, mark the slot & sensor and decrement availability
--- Author: Arun Anantharam Bagade
+
 
 DELIMITER //
 CREATE TRIGGER trg_after_booking_insert
@@ -853,7 +839,7 @@ DELIMITER ;
 
 
 -- 2. When a sensor flips from occupied→vacant, finalize any active booking
--- Author: Amani Alwala
+
 
 DELIMITER //
 CREATE TRIGGER trg_before_sensor_update
@@ -885,7 +871,6 @@ END;
 DELIMITER ;
 
 -- 3. Scan for unauthorized parking, log into violations.
--- Author: Shivangi Jaiswal
 
 DELIMITER //
 CREATE TRIGGER trg_after_sensor_update_violation
@@ -921,7 +906,7 @@ END;
 DELIMITER ;
 
 -- 4. When a booking’s status flips to reserved, for post-paid, auto‑insert a pending payment record
--- Author: Parthan Patel
+
 
 DELIMITER //
 CREATE TRIGGER trg_after_booking_complete
@@ -950,7 +935,7 @@ END;
 DELIMITER ;
 
 -- 5. For case where booking is done, but payment is made some time later, update the corresponding booking
--- Author: Yidi Li
+
 
 DELIMITER //
 CREATE TRIGGER trg_after_payment_insert
@@ -996,7 +981,7 @@ DELIMITER ;
 ------------------------------------------------------------------------------------------
 Insert Data into new tables
 */
-/* Author: Amani Alwala */
+
 INSERT INTO users (first_name, last_name, email, phone, password_hash, user_type)
 VALUES
 ('John', 'Doe', 'johndoe@mail.com', '1234567890', '1234567890', 'customer'),
@@ -1008,7 +993,6 @@ VALUES
 ('Kevin', 'Matt', 'kevin@parkatease.com', '5554567891', '5554567891', 'admin')
 ;
 
-/* Author: Amani Alwala */
 INSERT INTO vehicles (user_id, license_plate, vehicle_type)
 VALUES
 (1, 'AB123CD', 'car'),
@@ -1018,7 +1002,7 @@ VALUES
 (5, 'GH345IJ', 'car')
 ;
 
-/* Author: Amani Alwala */
+
 INSERT INTO parking_lots (lot_name, location, total_slots, available_slots)
 VALUES
 ('Lot A', '123 Elm Street', 100, 80),
@@ -1026,7 +1010,7 @@ VALUES
 ('Lot C', '789 Maple Drive', 200, 150)
 ;
 
-/* Author: Arun Anantharam Bagade */
+
 INSERT INTO parking_slots (lot_id, slot_number, slot_type, is_available)
 VALUES
 (1, '1', 'regular', TRUE),
@@ -1036,7 +1020,7 @@ VALUES
 (1, '5', 'handicapped', FALSE)
 ;
 
-/* Author: Arun Anantharam Bagade */
+
 INSERT INTO bookings (user_id, slot_id, vehicle_id, start_time, end_time, status)
 VALUES
 (1, 1, 1, '2025-04-28 09:00:00', '2025-04-28 12:00:00', 'completed'),
@@ -1046,7 +1030,7 @@ VALUES
 (5, 5, 5, '2025-04-28 12:00:00', '2025-04-28 15:00:00', 'active')  
 ;
 
-/* Author: Arun Anantharam Bagade */
+
 INSERT INTO parking_sensors (slot_id, status, last_updated)
 VALUES
 (1, 'vacant', '2025-03-21 12:00:00'),
@@ -1056,7 +1040,6 @@ VALUES
 (5, 'occupied', '2025-03-21 15:00:00')
 ;
 
-/* Author: Shivangi Jaiswal */
 INSERT INTO payments (booking_id, amount, payment_status, payment_method)
 VALUES
 (1, 25.00, 'completed', 'credit_card'),
@@ -1066,7 +1049,7 @@ VALUES
 (5, 20.00, 'refunded', 'credit_card')
 ;
 
-/* Author: Shivangi Jaiswal */
+
 INSERT INTO access_control (user_id, vehicle_id, access_token, status)
 VALUES
 (1, 1, 'TOKEN12345', 'active'),
@@ -1076,7 +1059,7 @@ VALUES
 (5, 5, 'TOKEN78901', 'active')
 ;
 
-/* Author: Shivangi Jaiswal */
+
 INSERT INTO logs (vehicle_id, lot_id, entry_time, exit_time)
 VALUES
 (1, 1, '2025-03-21 09:00:00', '2025-03-21 12:00:00'),
@@ -1086,7 +1069,7 @@ VALUES
 (5, 1, '2025-03-21 13:00:00', '2025-03-21 15:00:00') 
 ;
 
-/* Author: Yidi Li */
+
 INSERT INTO violations (vehicle_id, lot_id, violation_type, timestamp)
 VALUES
 (1, 1, 'no_booking', '2025-03-21 09:30:00'),
@@ -1096,7 +1079,7 @@ VALUES
 (5, 2, 'unauthorized_entry', '2025-03-21 15:30:00') 
 ;
 
-/* Author: Yidi Li */
+
 INSERT INTO staff (lot_id, first_name, last_name, role, phone, email)
 VALUES
 (1, 'Michael', 'Smith', 'manager', '5551234567', 'michael@parkatease.com'),
@@ -1106,7 +1089,7 @@ VALUES
 (1, 'Kevin', 'Matt', 'manager', '5554567891', 'kevin@parkatease.com')
 ;
 
-/* Author: Yidi Li */
+
 INSERT INTO subscription_plans (plan_name, price, duration_days)
 VALUES
 ('Basic Plan', 50.00, 30),
@@ -1116,7 +1099,7 @@ VALUES
 ('Corporate Plan', 300.00, 180)
 ;
 
-/* Author: Parthan Patel */
+
 INSERT INTO user_subscriptions (user_id, plan_id, start_date, end_date, status)
 VALUES
 (1, 1, '2025-03-01', '2025-03-31', 'active'),
@@ -1126,7 +1109,7 @@ VALUES
 (5, 5, '2025-01-01', '2025-06-30', 'active')
 ;
 
-/* Author: Parthan Patel */
+
 INSERT INTO discounts (code, discount_percentage, expiry_date)
 VALUES
 ('DISC10', 10.00, '2025-12-31'),
@@ -1136,7 +1119,6 @@ VALUES
 ('SPRING15', 15.00, '2025-05-15')
 ;
 
-/* Author: Parthan Patel */
 INSERT INTO booking_discounts (booking_id, discount_id)
 VALUES
 (1, 1),
